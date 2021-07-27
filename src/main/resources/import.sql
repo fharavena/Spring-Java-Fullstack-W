@@ -1,0 +1,25 @@
+INSERT INTO producto (nombre, precio, cantidad) VALUES ('producto1',101.0,5.5)
+INSERT INTO producto (nombre, precio, cantidad) VALUES ('producto2',101.0,15.5)
+INSERT INTO producto (nombre, precio, cantidad) VALUES ('producto3',103.0,25.5)
+INSERT INTO producto (nombre, precio, cantidad) VALUES ('producto4',104.0,25.5)
+INSERT INTO producto (nombre, precio, cantidad) VALUES ('producto5',105.0,35.5)
+INSERT INTO producto (nombre, precio, cantidad) VALUES ('producto6',105.0,35.5)
+INSERT INTO producto (nombre, precio, cantidad) VALUES ('producto7',105.0,5.5)
+
+INSERT INTO cliente (nombre, estado) VALUES ('nombre1',1)
+INSERT INTO cliente (nombre, estado) VALUES ('nombre2',1)
+INSERT INTO cliente (nombre, estado) VALUES ('nombre3',0)
+INSERT INTO cliente (nombre, estado) VALUES ('nombre4',0)
+INSERT INTO cliente (nombre, estado) VALUES ('nombre5',1)
+INSERT INTO cliente (nombre, estado) VALUES ('nombre6',1)
+INSERT INTO cliente (nombre, estado) VALUES ('nombre7',1)
+
+INSERT INTO venta (descuento, fecha,iva,total,cliente_id) VALUES (5,NOW(),20.0,200.0,2)
+INSERT INTO venta (descuento, fecha,iva,total,cliente_id) VALUES (10,NOW(),60.0,300.0,3)
+
+INSERT INTO detalle (cantidad, subtotal,producto_id,venta_id) VALUES (10.0,20.0,1,1)
+INSERT INTO detalle (cantidad, subtotal,producto_id,venta_id) VALUES (10.0,30.0,2,1)
+INSERT INTO detalle (cantidad, subtotal,producto_id,venta_id) VALUES (10.0,20.0,1,2)
+INSERT INTO detalle (cantidad, subtotal,producto_id,venta_id) VALUES (10.0,50.0,3,2)
+INSERT INTO detalle (cantidad, subtotal,producto_id,venta_id) VALUES (10.0,50.0,4,2)
+
