@@ -34,7 +34,7 @@ public class ProductController {
         Map<String, Object> response = new HashMap<>();
 
         Product product  = productRepository.getById(id);
-        System.out.println(product);
+
 
         response.put("data", product);
         return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
