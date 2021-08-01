@@ -22,7 +22,9 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.xml.transform.Result;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/sale")
@@ -34,7 +36,7 @@ public class SaleController {
     @Autowired
     private SaleRepository saleRepository;
 
-    @GetMapping(value = "list")
+    @GetMapping(value = "")
     public ResponseEntity<?> list() {
         List<SaleSimpleListDTO> response = saleService.findSales();
         return new ResponseEntity<List<SaleSimpleListDTO>>(response, HttpStatus.OK);
@@ -46,10 +48,29 @@ public class SaleController {
         return new ResponseEntity<Sale>(response, HttpStatus.OK);
     }
 
-    @PostMapping(path = "/insert")
+    @PostMapping(path = "")
     public ResponseEntity<?> create(@Valid @RequestBody(required = true) SaleInputDTO saleInput) {
-        String output = saleService.saveSale(saleInput);
-        return new ResponseEntity<String>(output, HttpStatus.CREATED);
+        Map<String, Object> response = new HashMap<>();
+        if (saleInput == null) {
+            response.put("error","body vacio");
+            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
+        }
+        Map<String, Object> output = saleService.saveSale(saleInput);
+
+        if(output.containsKey("error")){
+            return new ResponseEntity<Map<String, Object>>(output, HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<Map<String, Object>>(output, HttpStatus.CREATED);
+    }
+
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity<?> delete(@PathVariable("id") Long id) {
+        Map<String, Object> output = saleService.deleteSale(id);
+
+        if(output.containsKey("error")){
+            return new ResponseEntity<Map<String, Object>>(output, HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<Map<String, Object>>(output, HttpStatus.CREATED);
     }
 
     @ExceptionHandler( HttpMessageNotReadableException.class)
