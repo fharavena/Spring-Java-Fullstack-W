@@ -1,7 +1,7 @@
 package com.wherex.appventas.controllers;
 
 import com.wherex.appventas.entity.Client;
-import com.wherex.appventas.service.ClientService;
+import com.wherex.appventas.service.IService.IClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,9 +13,9 @@ import java.util.List;
 @RequestMapping("/api/client")
 public class ClientController {
     @Autowired
-    private ClientService clientService;
+    private IClientService clientService;
 
-    @GetMapping(value="list")
+    @GetMapping(value="")
     public List<Client> list(){
         return clientService.findByEstado(1);
     }

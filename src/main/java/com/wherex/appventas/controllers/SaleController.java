@@ -3,24 +3,26 @@ package com.wherex.appventas.controllers;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.wherex.appventas.domain.SaleInputDTO;
+import com.wherex.appventas.domain.SaleInputEditDTO;
 import com.wherex.appventas.domain.SaleSimpleListDTO;
 import com.wherex.appventas.entity.Sale;
 import com.wherex.appventas.repository.SaleRepository;
+import com.wherex.appventas.service.IService.ISaleService;
 import com.wherex.appventas.service.SaleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.lang.Nullable;
+import org.springframework.validation.BindException;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.MethodArgumentNotValidException;
+
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolver;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import javax.xml.transform.Result;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -32,7 +34,7 @@ import java.util.Map;
 public class SaleController {
 
     @Autowired
-    private SaleService saleService;
+    private ISaleService saleService;
     @Autowired
     private SaleRepository saleRepository;
 
@@ -63,6 +65,38 @@ public class SaleController {
         return new ResponseEntity<Map<String, Object>>(output, HttpStatus.CREATED);
     }
 
+    @PutMapping(path  ="/borrame")
+    public ResponseEntity<?> updateborrame(@Valid @RequestBody(required =true)SaleInputEditDTO saleInput){
+        Map<String, Object> response = new HashMap<>();
+        if (saleInput == null) {
+            response.put("error","body vacio");
+            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
+        }
+        Map<String, Object> output = saleService.editSaleBorrame(saleInput);
+
+        if(output.containsKey("error")){
+            return new ResponseEntity<Map<String, Object>>(output, HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<Map<String, Object>>(output, HttpStatus.CREATED);
+    }
+
+    @PutMapping(path  ="")
+    public ResponseEntity<?> update(@Valid @RequestBody(required =true) Sale saleInput){
+        Map<String, Object> response = new HashMap<>();
+        if (saleInput == null) {
+            response.put("error","body vacio");
+            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
+        }
+        Map<String, Object> output = saleService.editSale(saleInput);
+
+        if(output.containsKey("error")){
+            return new ResponseEntity<Map<String, Object>>(output, HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<Map<String, Object>>(output, HttpStatus.CREATED);
+    }
+
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") Long id) {
         Map<String, Object> output = saleService.deleteSale(id);
@@ -75,7 +109,18 @@ public class SaleController {
 
     @ExceptionHandler( HttpMessageNotReadableException.class)
     public ResponseEntity<?> unknownKey(JsonMappingException exception) {
-        String msg = "Error en la construccion JSON de entrada";
-        return new ResponseEntity<String>(msg, HttpStatus.BAD_REQUEST);
+        Map<String, Object> response = new HashMap<>();
+
+        response.put("error",exception.getOriginalMessage().replaceAll("\\(.*?\\)",""));
+        return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(value= BindException.class)
+    protected ResponseEntity<?> handleBindException(
+            BindException ex, HttpServletRequest request, HttpServletResponse response, @Nullable Object handler)
+            throws IOException {
+        Map<String, Object> localResponse = new HashMap<>();
+        localResponse.put("error","error en la entrada JSON");
+        return new ResponseEntity<Map<String, Object>>( localResponse, HttpStatus.BAD_REQUEST);
     }
 }
