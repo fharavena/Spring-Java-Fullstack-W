@@ -5,6 +5,7 @@ INSERT INTO producto (nombre, precio, cantidad) VALUES ('producto4',104.0,25.5)
 INSERT INTO producto (nombre, precio, cantidad) VALUES ('producto5',105.0,35.5)
 INSERT INTO producto (nombre, precio, cantidad) VALUES ('producto6',105.0,35.5)
 INSERT INTO producto (nombre, precio, cantidad) VALUES ('producto7',105.0,5.5)
+INSERT INTO producto (nombre, precio, cantidad) VALUES ('producto8',105.0,0.0)
 
 INSERT INTO cliente (nombre, estado) VALUES ('nombre1',1)
 INSERT INTO cliente (nombre, estado) VALUES ('nombre2',1)

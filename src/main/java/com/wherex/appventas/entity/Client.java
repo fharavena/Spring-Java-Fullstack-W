@@ -1,5 +1,6 @@
-package com.wherex.appventas.models.entity;
+package com.wherex.appventas.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -8,11 +9,12 @@ import java.io.Serializable;
 @Data
 @Entity
 @Table(name = "cliente")
-public class Cliente implements Serializable {
+public class Client implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nombre;
+    @JsonIgnore
     private Integer estado;
 
     private static final long serialVersionUID = 1L;

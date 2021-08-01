@@ -1,4 +1,4 @@
-package com.wherex.appventas.models.entity;
+package com.wherex.appventas.entity;
 
 import lombok.Data;
 
@@ -8,7 +8,7 @@ import java.io.Serializable;
 @Data
 @Entity
 @Table(name = "producto")
-public class Producto implements Serializable {
+public class Product implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
