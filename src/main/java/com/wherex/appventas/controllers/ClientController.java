@@ -19,4 +19,6 @@ public class ClientController {
     public List<Client> list(){
         return clientService.findByEstado(1);
     }
+
+
 }
