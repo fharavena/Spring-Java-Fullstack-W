@@ -3,12 +3,10 @@ package com.wherex.appventas.controllers;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.wherex.appventas.domain.SaleInputDTO;
-import com.wherex.appventas.domain.SaleInputEditDTO;
 import com.wherex.appventas.domain.SaleSimpleListDTO;
 import com.wherex.appventas.entity.Sale;
 import com.wherex.appventas.repository.SaleRepository;
 import com.wherex.appventas.service.IService.ISaleService;
-import com.wherex.appventas.service.SaleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +16,6 @@ import org.springframework.validation.BindException;
 import org.springframework.validation.annotation.Validated;
 
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -62,22 +59,6 @@ public class SaleController {
         if(output.containsKey("error")){
             return new ResponseEntity<Map<String, Object>>(output, HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<Map<String, Object>>(output, HttpStatus.CREATED);
-    }
-
-    @PutMapping(path  ="/borrame")
-    public ResponseEntity<?> updateborrame(@Valid @RequestBody(required =true)SaleInputEditDTO saleInput){
-        Map<String, Object> response = new HashMap<>();
-        if (saleInput == null) {
-            response.put("error","body vacio");
-            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
-        }
-        Map<String, Object> output = saleService.editSaleBorrame(saleInput);
-
-        if(output.containsKey("error")){
-            return new ResponseEntity<Map<String, Object>>(output, HttpStatus.BAD_REQUEST);
-        }
-
         return new ResponseEntity<Map<String, Object>>(output, HttpStatus.CREATED);
     }
 

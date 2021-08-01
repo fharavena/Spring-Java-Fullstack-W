@@ -1,7 +1,6 @@
 package com.wherex.appventas.service;
 
 import com.wherex.appventas.domain.SaleInputDTO;
-import com.wherex.appventas.domain.SaleInputEditDTO;
 import com.wherex.appventas.domain.SaleItemInputDTO;
 import com.wherex.appventas.domain.SaleSimpleListDTO;
 import com.wherex.appventas.entity.Detail;
@@ -129,65 +128,6 @@ public class SaleService implements ISaleService {
         String msg = saleRepository.save(sale).getId().toString();
 
         response.put("data", saleRepository.save(sale));
-        return response;
-
-    }
-
-    @Override
-    @Transactional(readOnly = false)
-    public Map<String, Object> editSaleBorrame(SaleInputEditDTO saleInput) {
-        Map<String, Object> response = new HashMap<>();
-
-        try {
-            Sale saleDB = saleRepository.getById(saleInput.getId());
-
-            if (saleInput.getFecha() != null) {
-                saleDB.setFecha(saleInput.getFecha());
-            }
-
-            if (saleInput.getCliente() != null) {
-                saleDB.setCliente(clientRepository.getById(saleInput.getCliente()));
-            }
-
-            if (saleInput.getDescuento() != null) {
-                if (saleInput.getDescuento() > 100) {
-                    response.put("error", "Descuento excede el 100% ");
-                    return response;
-                }
-                if (saleInput.getItem() == null) {
-                    saleDB.setDescuento(((saleInput.getDescuento() * saleDB.getTotal()) / 100));
-                    saleDB.setIva((saleDB.getTotal() - saleDB.getDescuento()) * 0.19);
-                }
-            }
-            if (saleInput.getItem() != null) {
-                Double total = 0.0;
-                for (SaleItemInputDTO item : saleInput.getItem()) {
-                    Detail detail = new Detail();
-                    Double precio = 0.0;
-                    if (item.getCantidad() != null || item.getProducto() != null) {
-                        Product productTemp = productRepository.getById(item.getProducto());
-                        if (productTemp.getCantidad() < item.getCantidad()) {
-                        }
-
-
-//                    }else if(item.getCantidad() != null){
-//
-//                    }else if(item.getCantidad() != null){
-
-                    } else {
-                        response.put("error", "un detalle de factura viene vacio: " + item.getProducto());
-                        return response;
-                    }
-                }
-
-            }
-
-
-            response.put("data", saleDB.toString());
-        } catch (EntityNotFoundException e) {
-            response.put("error", "La id no existe en la entrada JSON");
-
-        }
         return response;
 
     }
