@@ -22,12 +22,12 @@ $ java -jar target/nombre_aplicacion.jar
 ----
 
 ## Enlaces 
-[Front URL](http://deimos.cl/app-ventas-front/)
-[Repository Front](https://github.com/fharavena/app-ventas-front)
-[Backend URL](https://app-venta-wherex.herokuapp.com/api/)
-[URL Repository Backend](https://github.com/fharavena/Spring-Java-Fullstack-W)
-[API public documentation](https://documenter.getpostman.com/view/4887164/Tzsfm5Nb)
-[API documentation (backend running)](https://app-venta-wherex.herokuapp.com//swagger-ui.html)
+[Front URL](http://deimos.cl/app-ventas-front/)\
+[Repository Front](https://github.com/fharavena/app-ventas-front)\
+[Backend URL](https://app-venta-wherex.herokuapp.com/api/)\
+[URL Repository Backend](https://github.com/fharavena/Spring-Java-Fullstack-W)\
+[API public documentation](https://documenter.getpostman.com/view/4887164/Tzsfm5Nb)\
+[API documentation (backend running)](https://app-venta-wherex.herokuapp.com//swagger-ui.html)\
 
 ----
 
