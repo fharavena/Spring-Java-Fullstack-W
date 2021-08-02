@@ -117,7 +117,6 @@ public class SaleService implements ISaleService {
 
         descuento = ((saleInput.getDescuento() * total) / 100);
         sale.setDescuento(descuento);
-//        total -= descuento;
         sale.setIva((total - descuento) * 0.19);
         sale.setTotal(total);
         Date date = new Date();
@@ -126,17 +125,19 @@ public class SaleService implements ISaleService {
         sale.setCliente(clientRepository.getById(saleInput.getCliente()));
 
         String msg = saleRepository.save(sale).getId().toString();
-
-        response.put("data", saleRepository.save(sale));
+        saleRepository.save(sale);
+        response.put("status", "success");
+        response.put("message", "Venta creada satisfacoriamente");
         return response;
-
     }
 
     @Override
     @Transactional(readOnly = false)
     public Map<String, Object> editSale(Sale saleInput) {
         Map<String, Object> response = new HashMap<>();
+
         Sale saleOriginal = saleRepository.getById(saleInput.getId());
+
 
         Double total = 0.0;
         Double subtotal = 0.0;
@@ -145,17 +146,19 @@ public class SaleService implements ISaleService {
 
         for (Detail item : saleInput.getItems()) {
             subtotal = 0.0;
-            Detail ItemOriginal = detailRepository.getById(item.getId());
+
             Product productOriginal = productRepository.getById(item.getProducto().getId());
 
-            //validar cantidad de producto no sobrepase stock
-            if (item.getCantidad() > ItemOriginal.getCantidad() + productOriginal.getCantidad()) {
-                response.put("error", "la cantidad excede el stock existente ");
-                return response;
+            if(item.getId() != null){
+                Detail ItemOriginal = detailRepository.getById(item.getId());
+                //validar cantidad de producto no sobrepase stock
+                if (item.getCantidad() > ItemOriginal.getCantidad() + productOriginal.getCantidad()) {
+                    response.put("error", "la cantidad excede el stock existente ");
+                    return response;
+                }
             }
 
             subtotal = item.getCantidad() * productOriginal.getPrecio();
-
 
             //validar subtotal
             if (Math.abs(item.getSubtotal() - subtotal) > 0.1) {

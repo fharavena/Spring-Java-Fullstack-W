@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import java.io.Serializable;
 
 @Data
@@ -13,6 +14,7 @@ public class Detail implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Min(value = 0)
     private Double cantidad;
     private Double subtotal;
 

@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/api/sale")
 @Validated
 public class SaleController {
@@ -37,41 +38,60 @@ public class SaleController {
 
     @GetMapping(value = "")
     public ResponseEntity<?> list() {
-        List<SaleSimpleListDTO> response = saleService.findSales();
-        return new ResponseEntity<List<SaleSimpleListDTO>>(response, HttpStatus.OK);
+
+        Map<String, Object> response = new HashMap<>();
+
+        response.put("status", "success");
+        response.put("data", saleService.findSales());
+        return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
     }
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<?> getById(@PathVariable("id") Long id) {
-        Sale response = saleRepository.findById(id).orElse(null);
-        return new ResponseEntity<Sale>(response, HttpStatus.OK);
+        Map<String, Object> response = new HashMap<>();
+
+        Sale sale = saleRepository.findById(id).orElse(null);
+
+        if (sale == null) {
+            response.put("status", "error");
+            response.put("message", "Producto con id no encontrado");
+            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
+        }
+
+        response.put("status", "success");
+        response.put("data", sale);
+        return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
     }
 
     @PostMapping(path = "")
     public ResponseEntity<?> create(@Valid @RequestBody(required = true) SaleInputDTO saleInput) {
         Map<String, Object> response = new HashMap<>();
         if (saleInput == null) {
-            response.put("error","body vacio");
+            response.put("status", "error");
+            response.put("message", "Producto con id no encontrado");
             return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
         }
         Map<String, Object> output = saleService.saveSale(saleInput);
 
-        if(output.containsKey("error")){
+        if (output.containsKey("error")) {
+            output.put("status", "error");
             return new ResponseEntity<Map<String, Object>>(output, HttpStatus.BAD_REQUEST);
         }
+
+
         return new ResponseEntity<Map<String, Object>>(output, HttpStatus.CREATED);
     }
 
-    @PutMapping(path  ="")
-    public ResponseEntity<?> update(@Valid @RequestBody(required =true) Sale saleInput){
+    @PostMapping(path = "/{id}")
+    public ResponseEntity<?> update(@Valid @RequestBody(required = true) Sale saleInput) {
         Map<String, Object> response = new HashMap<>();
         if (saleInput == null) {
-            response.put("error","body vacio");
+            response.put("error", "body vacio");
             return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
         }
         Map<String, Object> output = saleService.editSale(saleInput);
 
-        if(output.containsKey("error")){
+        if (output.containsKey("error")) {
             return new ResponseEntity<Map<String, Object>>(output, HttpStatus.BAD_REQUEST);
         }
 
@@ -82,26 +102,25 @@ public class SaleController {
     public ResponseEntity<?> delete(@PathVariable("id") Long id) {
         Map<String, Object> output = saleService.deleteSale(id);
 
-        if(output.containsKey("error")){
+        if (output.containsKey("error")) {
             return new ResponseEntity<Map<String, Object>>(output, HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<Map<String, Object>>(output, HttpStatus.CREATED);
     }
 
-    @ExceptionHandler( HttpMessageNotReadableException.class)
+    @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<?> unknownKey(JsonMappingException exception) {
         Map<String, Object> response = new HashMap<>();
-
-        response.put("error",exception.getOriginalMessage().replaceAll("\\(.*?\\)",""));
+        response.put("error", exception.getOriginalMessage().replaceAll("\\(.*?\\)", ""));
         return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(value= BindException.class)
+    @ExceptionHandler(value = BindException.class)
     protected ResponseEntity<?> handleBindException(
             BindException ex, HttpServletRequest request, HttpServletResponse response, @Nullable Object handler)
             throws IOException {
         Map<String, Object> localResponse = new HashMap<>();
-        localResponse.put("error","error en la entrada JSON");
-        return new ResponseEntity<Map<String, Object>>( localResponse, HttpStatus.BAD_REQUEST);
+        localResponse.put("error", "error en la entrada JSON");
+        return new ResponseEntity<Map<String, Object>>(localResponse, HttpStatus.BAD_REQUEST);
     }
 }

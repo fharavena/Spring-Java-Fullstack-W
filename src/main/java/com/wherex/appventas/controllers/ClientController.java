@@ -3,7 +3,6 @@ package com.wherex.appventas.controllers;
 import com.wherex.appventas.entity.Client;
 import com.wherex.appventas.entity.Product;
 import com.wherex.appventas.repository.ClientRepository;
-import com.wherex.appventas.repository.ProductRepository;
 import com.wherex.appventas.service.IService.IClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/api/client")
 public class ClientController {
     @Autowired
@@ -24,8 +24,12 @@ public class ClientController {
     private ClientRepository clientRepository;
 
     @GetMapping(value="")
-    public List<Client> list(){
-        return clientService.findByEstado(1);
+    public ResponseEntity<?> list(){
+        Map<String, Object> response = new HashMap<>();
+
+        response.put("status", "success");
+        response.put("data", clientService.findByEstado(1));
+        return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
     }
 
     @GetMapping(value = "/{id}")
@@ -34,6 +38,18 @@ public class ClientController {
 
         Client client  = clientRepository.getById(id);
 
+        response.put("status", "success");
+        response.put("data", client);
+        return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
+    }
+
+    @GetMapping(value = "findbyname/{name}")
+    public ResponseEntity<?> findByName(@PathVariable("name") String name) {
+        Map<String, Object> response = new HashMap<>();
+
+        List<Client> client = clientRepository.findByName(name);
+
+        response.put("status", "success");
         response.put("data", client);
         return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
     }
@@ -47,6 +63,7 @@ public class ClientController {
             return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
         }
 
+        response.put("status", "success");
         response.put("data", clientRepository.save(client));
         return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
     }

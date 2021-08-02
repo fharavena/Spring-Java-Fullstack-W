@@ -9,9 +9,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/api/product")
 public class ProductController {
     @Autowired
@@ -22,7 +24,6 @@ public class ProductController {
 
     @GetMapping(value = "")
     public ResponseEntity<?> list() {
-
         Map<String, Object> response = new HashMap<>();
 
         response.put("data", productService.findByCantidadGreaterThan(0.0));
@@ -40,6 +41,17 @@ public class ProductController {
         return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
     }
 
+    @GetMapping(value = "findbyname/{name}")
+    public ResponseEntity<?> findByName(@PathVariable("name") String name) {
+        Map<String, Object> response = new HashMap<>();
+
+         List<Product> products = productRepository.findByName(name);
+
+        response.put("status", "success");
+        response.put("data", products);
+        return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
+    }
+
     @PostMapping(value = "")
     public ResponseEntity<?> create(@RequestBody(required = true) Product product) {
         Map<String, Object> response = new HashMap<>();
@@ -49,6 +61,7 @@ public class ProductController {
             return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
         }
 
+        response.put("status", "success");
         response.put("data", productRepository.save(product));
         return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
     }

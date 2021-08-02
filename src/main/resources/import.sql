@@ -16,7 +16,7 @@ INSERT INTO cliente (nombre, estado) VALUES ('nombre6',1)
 INSERT INTO cliente (nombre, estado) VALUES ('nombre7',1)
 
 INSERT INTO venta (descuento, fecha,iva,total,cliente_id) VALUES (5,NOW(),20.0,200.0,2)
-INSERT INTO venta (descuento, fecha,iva,total,cliente_id) VALUES (10,NOW(),60.0,300.0,3)
+INSERT INTO venta (descuento, fecha,iva,total,cliente_id) VALUES (10,NOW(),60.0,300.0,5)
 
 INSERT INTO detalle (cantidad, subtotal,producto_id,venta_id) VALUES (10.0,20.0,1,1)
 INSERT INTO detalle (cantidad, subtotal,producto_id,venta_id) VALUES (10.0,30.0,2,1)

@@ -2,7 +2,6 @@ package com.wherex.appventas.domain;
 
 import lombok.Data;
 
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Data
